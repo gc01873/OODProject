@@ -1,1 +1,196 @@
+/////////////////////// Command Code ////////////////////////////////////////
+public interface RegisterCommand {
+    public void execute();
+}
+
+public class SaleCommand implements RegisterCommand {
+    Transactions transaction;
+    public SaleCommand(Transactions transaction){
+        this.transaction = transaction;
+    }
+    public void execute(){
+        transaction.sell();
+    }
+    
+}
+
+public class RefundCommand implements RegisterCommand{
+    Transactions transaction;
+    public RefundCommand(Transactions transaction){
+        this.transaction = transaction;
+    }
+    public void execute(){
+        transaction.refund();
+    }
+}
+public class Register {
+    RegisterCommand input;
+    public Register(){}
+    public void setCommand(RegisterCommand command){
+       input = command;
+    }
+    public void buttonWasPressed(){
+        input.execute();
+    }
+    
+}
+
+public class Transactions {
+    public void sell(){
+        System.out.println("A sale has been made");
+    }
+    public void refund(){
+        System.out.println("A refund has been made");
+    }
+    
+}
+
+
+public class TestRegister {
+    public static void main(String[] args){
+        Register reggie = new Register();
+        Transactions t = new Transactions();
+        SaleCommand s = new SaleCommand(t);
+        RefundCommand r = new RefundCommand(t);
+        reggie.setCommand(s);
+        reggie.buttonWasPressed();
+        reggie.setCommand(r);
+        reggie.buttonWasPressed();
+    }
+    
+}
+/////////////////////// Decorator Code ////////////////////////////////////////
+abstract class Device {
+    String description = "Unknown item";
+    public String getDescription(){
+        return description;
+    }
+    public abstract String getAdditionalInfo();
+    
+}
+abstract class AddOn extends Device {
+        public abstract String getAdditionalInfo();
+    }
+    
+public class Laptop extends Device{
+    public Laptop(){
+        description = "The Dell XPS 15 is our new pick for the best laptop of 2020. Dell's 2020 update to its 15-inch"+ 
+        "flagship ticks pretty much every box when it comes to what we want from a laptop";
+    }
+    public String getAdditionalInfo(){
+        return "\n"+"This laptop has phenomenal battery life";
+    }
+    
+}
+public class PS5 extends Device{
+    public PS5(){
+        description = "The PS5 (or PlayStation 5) is Sony's long-awaited next-generation console."+
+        " It costs $499.99 / £449.99 / AU$749.95 and will be available from November 12, 2020"+
+        " (in select markets such as the US and Japan) and November 19, 2020 for the rest of the world, including the UK.";
+    }
+    public String getAdditionalInfo(){
+        return "\n"+"The PS5 comes with 825 GB SSD";
+    }
+}
+class ProtectionPlan extends AddOn {
+    Device device;
+    public ProtectionPlan(Device device){
+        this.device = device;
+    }
+    public String getDescription(){
+        //2
+        return device.getDescription() + "\n\nThis laptop comes with a protection plan";
+    }
+    public String getAdditionalInfo(){
+        return device.getAdditionalInfo() + ".\nThe protection plan will guarantee a replacement if"+
+        " broken or damaged";
+    }
+}
+public class TechStore {
+    public static void main(String[] args){
+        Device d1 = new Laptop();
+        d1 = new ProtectionPlan(d1);
+        System.out.println(d1.getDescription());
+        System.out.println(d1.getAdditionalInfo());
+    }
+    
+}
+/////////////////////// Observer Code ////////////////////////////////////////
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class NotifyTransactions {
+    public static final String FIRSTNAME = "firstName";
+
+    private List<Amount> Amounts = new ArrayList<Amount>();
+    private List<PropertyChangeListener> listener = new ArrayList<PropertyChangeListener>();
+
+    public class Amount {
+
+        private double money;
+
+
+        public Amount(double money) {
+            this.money = money;
+        }
+
+        public double getMoney() {
+
+            return money;
+        }
+
+        public void setMoney(double money) {
+            notifyListeners(this,"Money",this.money,this.money = money);
+
+        }
+
+    }
+
+    public List<Amount> getAmounts() {
+        return Amounts;
+    }
+
+    public NotifyTransactions() {
+        // just for testing we hard-code the persons here:
+        Amounts.add(new Amount(50.00));
+    }
+
+    private void notifyListeners(Object object, String property, double oldValue, double newValue) {
+        for (PropertyChangeListener name : listener) {
+            name.propertyChange(new PropertyChangeEvent(this, property, oldValue, newValue));
+        }
+    }
+
+    public void addChangeListener(PropertyChangeListener newListener) {
+        listener.add(newListener);
+    }
+
+}
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class StoreObserver implements PropertyChangeListener {
+    public StoreObserver(NotifyTransactions model) {
+        model.addChangeListener(this);
+    }
+
+    public void propertyChange(PropertyChangeEvent event) {
+        System.out.println( "Before Transaction: "+ event.getOldValue() +"\n"+ "After Transaction: " 
+        + event.getNewValue());
+    }
+}
+public class test {
+    public static void main(String[] args){
+        NotifyTransactions T = new NotifyTransactions();
+        StoreObserver s = new StoreObserver(T);
+        // we set the amount that each customer has, The observer will be notified
+        for (NotifyTransactions.Amount amount : T.getAmounts()) {
+            amount.setMoney(amount.getMoney() + 110.00);
+        }
+    }
+    
+}
+/////////////////////// Facade Code //////////////////////////////////////// TBD:
 

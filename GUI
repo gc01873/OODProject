@@ -1,1 +1,123 @@
 
+package application;
+	
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import javafx.scene.control.TextField;
+
+public class Main extends Application  {
+
+	public static void main(String[] args) {
+		launch();
+		
+
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Pane pane = new Pane();
+		pane.setStyle("-fx-background-color: green");
+		
+		//Create Label 1
+		Label label1 = new Label("Enter Account Username: ");
+		label1.setLayoutY(50);
+		label1.setLayoutX(100);
+		label1.setStyle("-fx-text-fill: white");
+		
+		//Create Label 2
+		Label label2 = new Label("Enter Account Password: ");
+		label2.setLayoutY(100);
+		label2.setLayoutX(100);
+		label2.setStyle("-fx-text-fill: white");
+		
+		//Create Label 3
+		Label label3 = new Label("What would you like to purchase? ");
+		label3.setLayoutY(150);
+		label3.setLayoutX(200);
+		label3.setStyle("-fx-text-fill: white");
+		
+		//Create TextField 1
+		TextField TextField1 = new TextField();
+		TextField1.setLayoutX(240);
+		TextField1.setLayoutY(50);
+		
+		//Create TextField 2
+		TextField TextField2 = new TextField();
+		TextField2.setLayoutX(240);
+		TextField2.setLayoutY(100);
+		
+		//Create TextField 3
+		TextField TextField3 = new TextField();
+		TextField3.setLayoutX(220);
+		TextField3.setLayoutY(175);
+		
+		
+		//Buy Button
+		 Button b1 = new Button("Buy");
+		 b1.setLayoutY(250);
+		 b1.setLayoutX(100);
+		 //Action of Buy Button
+		 b1.setOnAction(new EventHandler<ActionEvent>() {
+			    @Override
+			    public void handle(ActionEvent event) {
+			        System.out.println("Buy button has been pressed");
+			    }
+			});
+		 
+		 //List Items Button
+		 Button b2 = new Button("List Items");
+		 b2.setLayoutX(100);
+		 b2.setLayoutY(300);
+		 //Action of List Items Button
+		 b2.setOnAction(new EventHandler<ActionEvent>() {
+			    @Override
+			    public void handle(ActionEvent event) {
+			        System.out.println("List Items button has been pressed");
+			    }
+			});
+		 
+		 //add to container
+		 pane.getChildren().addAll(b1,b2,label1,label2,label3,TextField1,TextField2,TextField3);
+		
+		//create Scene
+				Scene mainScene = new Scene(pane, 600, 600);
+				
+		//add to Stage
+		primaryStage.setScene(mainScene);
+				
+		//Show Stage
+		primaryStage.show();
+		
+	}
+}
+

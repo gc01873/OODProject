@@ -13,7 +13,7 @@ public class SaleCommand implements RegisterCommand {
     }
     
 }
-// gang gang
+
 public class RefundCommand implements RegisterCommand{
     Transactions transaction;
     public RefundCommand(Transactions transaction){

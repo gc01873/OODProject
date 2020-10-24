@@ -1,0 +1,83 @@
+package mong;
+
+
+import java.util.List;
+
+
+
+import com.mongodb.*;
+import com.mongodb.async.SingleResultCallback;
+import com.mongodb.client.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+
+import java.util.*;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
+
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+
+public class mMongo {
+    /*
+        mongoClient = MongoClients.create("mongodb://localhost:27017");
+    */
+    public static void main(String[] args) throws InterruptedException {
+
+
+        CountDownLatch latch = new CountDownLatch(1);
+        // connect to the local database server,default:127.0.0.1:27017
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        // get handle to "testDB" database
+        MongoDatabase database = (MongoDatabase) mongoClient.getDatabase("Tech2Go");
+
+        //code below will help with timing.
+        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
+            @Override
+            public void onResult(final Void result, final Throwable t) {
+                System.out.println("Operation Finished!");
+                latch.countDown();
+            }
+        };
+
+    /*
+
+    What's actually happening is the main method is finishing before your call to the database finishes.
+If you alter your code to wait for the results to come back before terminating, you get a much more reasonable result.
+     */
+        // get a handle to the "test" collection
+        MongoCollection<Document> collection = database.getCollection("Addon");
+
+        System.out.println("Collection completed");
+        collection.updateOne(Filters.eq("Product", "Insurance Package 1"), Updates.set("Price", 50.00 - 6));
+        /*Update value works for the database*/
+
+        FindIterable<Document> iterDoc = collection.find();
+/*collection.find, finds all the documents in the selection and stores it in the employee list*/
+        List<Document> employees = (List<Document>) collection.find().into(
+                new ArrayList<Document>());
+
+        /*for gui maybe creating a method to store the values of the employee documents*/
+
+        for (Document employee : employees) {
+                /*prints out the values of the employee Document, through each iteration*/
+                System.out.println("name = " + employee.getString("Warranty period")
+                        + " course details below");
+                System.out.println("course name = " + employee.getString("Product"));
+                System.out.println("cours type = " + employee.getDouble("Price"));
+                  /*if the product name in the collection equals the hard coded syntax, then the code was sucessful*/
+                if(employee.getString("Product").equals("Insurance Package 1")){
+                    System.out.println("Test sucedded");
+                }
+            }
+        }
+
+    }
+

@@ -145,9 +145,22 @@ public void start(Stage primaryStage) throws Exception {
            System.out.println("Clear Search button has been pressed");
        }
    });
+   //Search button
+   Button b4 = new Button("Search");
+   b4.setLayoutX(400);
+   b4.setLayoutY(175);
+   b4.setOnAction(new EventHandler<ActionEvent>() {
+	@Override
+	public void handle(ActionEvent event) {
+		String s = TextField3.getText();
+		if (s  != null) {
+		System.out.println(s);
+	}
+  }
+});
    
    //add to container
-   pane.getChildren().addAll(b1,b2,b3,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
+   pane.getChildren().addAll(b1,b2,b3,b4,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
   
   //create Scene
     Scene mainScene = new Scene(pane, 600, 600);

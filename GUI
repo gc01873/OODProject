@@ -1,6 +1,8 @@
 
 package application;
 	
+package sample;
+
 import java.awt.event.ActionListener;
 import java.util.List;
 
@@ -37,147 +39,153 @@ import javafx.scene.control.TextField;
 
 public class Main extends Application  {
 
-	public static void main(String[] args) {
-		launch();
-		
+    public static void main(String[] args) {
+        launch();
 
-	}
 
-	@Override
+    }
 
-public void start(Stage primaryStage) throws Exception {
-  primaryStage.setTitle("Tech 2GO");
-  
-  Pane pane = new Pane();
-  pane.setStyle("-fx-background-color: green");
-  
-  
-  //Create Username Label
-  Label label1 = new Label("Enter Account Username: ");
-  label1.setLayoutY(50);
-  label1.setLayoutX(100);
-  label1.setStyle("-fx-text-fill: white");
-  
-  //Create Password Label
-  Label label2 = new Label("Enter Account Password: ");
-  label2.setLayoutY(100);
-  label2.setLayoutX(100);
-  label2.setStyle("-fx-text-fill: white");
-  
-  //Create Purchase Label
-  Label label3 = new Label("What would you like to purchase? ");
-  label3.setLayoutY(150);
-  label3.setLayoutX(200);
-  label3.setStyle("-fx-text-fill: white");
-  
-  //Create Results Label
-  Label label4 = new Label("Results: ");
-  label4.setLayoutY(380);
-  label4.setLayoutX(100);
-  label4.setStyle("-fx-text-fill: white");
-  
-  //Create Quantity Label
-  Label label5 = new Label("Quantity: ");
-  label5.setLayoutY(230);
-  label5.setLayoutX(400);
-  label5.setStyle("-fx-text-fill: white");
-  
-  //Create Username TextField
-  TextField TextField1 = new TextField();
-  TextField1.setLayoutX(240);
-  TextField1.setLayoutY(50);
-  
-  //Create Password TextField 
-  TextField TextField2 = new TextField();
-  TextField2.setLayoutX(240);
-  TextField2.setLayoutY(100);
-  
-  //Create Purchase TextField 
-  TextField TextField3 = new TextField();
-  TextField3.setLayoutX(220);
-  TextField3.setLayoutY(175);
-  
-  //Create Results TextField 
-  TextField TextField4 = new TextField();
-  TextField4.setLayoutX(100);
-  TextField4.setLayoutY(400);
-  TextField4.setPrefWidth(400);
-  TextField4.setPrefHeight(175);
-  
-  //Create Quantity TextField 
-  TextField TextField5 = new TextField();
-  TextField5.setLayoutX(460);
-  TextField5.setLayoutY(230);
-  TextField5.setPrefWidth(50);
-  
-  //Buy Button
-   Button b1 = new Button("Buy");
-   b1.setLayoutY(240);
-   b1.setLayoutX(100);
-   //Action of Buy Button
-   b1.setOnAction(new EventHandler<ActionEvent>() {
-       @Override
-       public void handle(ActionEvent event) {
-           System.out.println("Buy button has been pressed");
-       }
-   });
-   
-   //List Items Button
-   Button b2 = new Button("List Items");
-   b2.setLayoutX(100);
-   b2.setLayoutY(280);
-   //Action of List Items Button
-   b2.setOnAction(new EventHandler<ActionEvent>() {
-       @Override
-       public void handle(ActionEvent event) {
-           System.out.println("List Items button has been pressed");
-       }
-   });
-   
-   //Clear Search Button
-   Button b3 = new Button("Clear Search");
-   b3.setLayoutY(320);
-   b3.setLayoutX(100);
-   //Action of Clear Search Button
-   b1.setOnAction(new EventHandler< ActionEvent>() {
-       @Override
-       public void handle(ActionEvent event) {
-           System.out.println("Clear Search button has been pressed");
-	   String strquantity= TextField5.getText();
-                String userinput=TextField3.getText();
-                int quan = Integer.parseInt(strquantity);
-             // boolean t=  setlist(userinput,quan);
-              //if boolean returns true, then kosi you can add the product to the people's class
-	  
-	   
-       }
-   });
-   //Search button
-   Button b4 = new Button("Search");
-   b4.setLayoutX(400);
-   b4.setLayoutY(175);
-   b4.setOnAction(new EventHandler<ActionEvent>() {
-	@Override
-	public void handle(ActionEvent event) {
-		String s = TextField3.getText();
-		if (s  != null) {
-		System.out.println(s);
-	}
-  }
-});
-   
-   //add to container
-   pane.getChildren().addAll(b1,b2,b3,b4,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
-  
-  //create Scene
-    Scene mainScene = new Scene(pane, 600, 600);
-    
-  //add to Stage
-  primaryStage.setScene(mainScene);
-    
-  //Show Stage
-  primaryStage.show();
-  
- }
+    @Override
+
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Tech 2GO");
+
+        Pane pane = new Pane();
+        pane.setStyle("-fx-background-color: green");
+
+
+        //Create Username Label
+        Label label1 = new Label("Enter Account Username: ");
+        label1.setLayoutY(50);
+        label1.setLayoutX(100);
+        label1.setStyle("-fx-text-fill: white");
+
+        //Create Password Label
+        Label label2 = new Label("Enter Account Password: ");
+        label2.setLayoutY(100);
+        label2.setLayoutX(100);
+        label2.setStyle("-fx-text-fill: white");
+
+        //Create Purchase Label
+        Label label3 = new Label("What would you like to purchase? ");
+        label3.setLayoutY(150);
+        label3.setLayoutX(200);
+        label3.setStyle("-fx-text-fill: white");
+
+        //Create Results Label
+        Label label4 = new Label("Results: ");
+        label4.setLayoutY(380);
+        label4.setLayoutX(100);
+        label4.setStyle("-fx-text-fill: white");
+
+        //Create Quantity Label
+        Label label5 = new Label("Quantity: ");
+        label5.setLayoutY(230);
+        label5.setLayoutX(400);
+        label5.setStyle("-fx-text-fill: white");
+
+        //Create Username TextField
+        TextField TextField1 = new TextField();
+        TextField1.setLayoutX(240);
+        TextField1.setLayoutY(50);
+
+        //Create Password TextField
+        TextField TextField2 = new TextField();
+        TextField2.setLayoutX(240);
+        TextField2.setLayoutY(100);
+
+        //Create Purchase TextField
+        TextField TextField3 = new TextField();
+        TextField3.setLayoutX(220);
+        TextField3.setLayoutY(175);
+
+        //Create Results TextField
+        TextField TextField4 = new TextField();
+        TextField4.setLayoutX(100);
+        TextField4.setLayoutY(400);
+        TextField4.setPrefWidth(400);
+        TextField4.setPrefHeight(175);
+
+        //Create Quantity TextField
+        TextField TextField5 = new TextField();
+        TextField5.setLayoutX(460);
+        TextField5.setLayoutY(230);
+        TextField5.setPrefWidth(50);
+
+        //Buy Button
+        Button b1 = new Button("Buy");
+        b1.setLayoutY(240);
+        b1.setLayoutX(100);
+        //Action of Buy Button
+        b1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Buy button has been pressed");
+            }
+        });
+
+        //List Items Button
+        Button b2 = new Button("List Items");
+        b2.setLayoutX(100);
+        b2.setLayoutY(280);
+        //Action of List Items Button
+        b2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("List Items button has been pressed");
+            }
+        });
+
+        //Clear Search Button
+        Button b3 = new Button("Clear Search");
+        b3.setLayoutY(320);
+        b3.setLayoutX(100);
+        //Action of Clear Search Button
+        b3.setOnAction(new EventHandler< ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    System.out.println("Clear Search button has been pressed");
+                    String strquantity = TextField5.getText();
+                    String userinput = TextField3.getText();
+                    int quan = Integer.parseInt(strquantity);
+                }
+                catch(Exception e){
+                    System.out.println("No String has been input");
+                }
+                // boolean t=  setlist(userinput,quan);
+                //if boolean returns true, then kosi you can add the product to the people's class
+
+
+            }
+        });
+        //Search button
+        Button b4 = new Button("Search");
+        b4.setLayoutX(400);
+        b4.setLayoutY(175);
+        b4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String s = TextField3.getText();
+                if (s  != null) {
+                    System.out.println(s);
+                }
+            }
+        });
+
+        //add to container
+        pane.getChildren().addAll(b1,b2,b3,b4,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
+
+        //create Scene
+        Scene mainScene = new Scene(pane, 600, 600);
+
+        //add to Stage
+        primaryStage.setScene(mainScene);
+
+        //Show Stage
+        primaryStage.show();
+
+    }
 }
+
 

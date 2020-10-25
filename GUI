@@ -87,7 +87,7 @@ public class Main extends Application  {
         //Create Username TextField
         TextField TextField1 = new TextField();
         TextField1.setLayoutX(240);
-        TextField1.setLayoutY(50);
+        TextField1.setLayoutY(50); 
 
         //Create Password TextField
         TextField TextField2 = new TextField();

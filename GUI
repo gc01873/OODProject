@@ -143,6 +143,13 @@ public void start(Stage primaryStage) throws Exception {
        @Override
        public void handle(ActionEvent event) {
            System.out.println("Clear Search button has been pressed");
+	   String strquantity= TextField5.getText();
+                String userinput=TextField3.getText();
+                int quan = Integer.parseInt(strquantity);
+             // boolean t=  setlist(userinput,quan);
+              //if boolean returns true, then kosi you can add the product to the people's class
+	  
+	   
        }
    });
    //Search button

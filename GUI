@@ -173,8 +173,63 @@ public class Main extends Application  {
             }
         });
 
+        //Create Enter Button
+         
+         Button b5 = new Button("Enter");
+         
+         b5.setLayoutY(100);
+         
+         b5.setLayoutX(400);
+         
+         //Action of the Enter Button 
+         
+         b5.setOnAction(new EventHandler<ActionEvent>() {
+          
+       @Override
+       
+       public void handle(ActionEvent event) {
+        
+           String username = TextField1.getText();
+           
+           String password = TextField2.getText();
+           
+       }
+       
+   });
+
+        //Create Stop Button
+         
+         Button b6 = new Button("Stop");
+         
+         b6.setLayoutY(320);
+         
+         b6.setLayoutX(460);
+         
+         //Action for the Stop Button
+         
+         b6.setOnAction(new EventHandler<ActionEvent>() {
+          
+       @Override
+       
+       public void handle(ActionEvent event) {
+        
+           try {
+            
+      primaryStage.close();
+      
+     } catch (Exception e) {
+      
+      // TODO Auto-generated catch block
+      
+      e.printStackTrace();
+      
+     }
+           
+       }
+       });
+
         //add to container
-        pane.getChildren().addAll(b1,b2,b3,b4,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
+        pane.getChildren().addAll(b1,b2,b3,b4,b5,b6,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
 
         //create Scene
         Scene mainScene = new Scene(pane, 600, 600);

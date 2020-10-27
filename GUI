@@ -155,7 +155,19 @@ public class Main extends Application  {
                 }
                 // boolean t=  setlist(userinput,quan);
                 //if boolean returns true, then kosi you can add the product to the people's class
+                           /*
+                if(t){
+                    //gets the value of price
+                   double price=searchPrice(userinput,quan);
+		   ,can create a dummy variable to mimick price. leave the method all commented. 
+              people.register(price);
+	      //call the register method to complete the transaction kosi.
+         
+                     //after the transaction add the string and quantity into a hashmap.
+                     people.hashMap(item,quantity); 
+                }
 
+*/
 
             }
         });
@@ -192,7 +204,22 @@ public class Main extends Application  {
            String username = TextField1.getText();
            
            String password = TextField2.getText();
-           
+           /*
+                String[]confirm=AccountConfirmation(username,password);
+                //return an array of user info
+                if(confirm.length>0){
+                    System.out.println(confirm.length);
+                    System.out.println("User info processed");
+                    
+		    //set the values in the people class(String confrim will return an array length of 7. string values are in this order
+		    firstname,lastname,email address,password,billing address, shipping address,username,
+                    people(confirm);
+                }
+                else{
+                    System.out.println("User not found. please try again");
+                }
+*/
+
        }
        
    });

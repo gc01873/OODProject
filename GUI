@@ -181,6 +181,8 @@ public class Main extends Application  {
                 String s = TextField3.getText();
                 if (s  != null) {
                     System.out.println(s);
+		    //prints to result textfield
+		    TextField4.setText(s);
                 }
             }
         });

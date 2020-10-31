@@ -1,6 +1,6 @@
 /////////////////////// Command Code ////////////////////////////////////////
 public interface RegisterCommand {
-    public void execute();
+    public void execute(String s, int quantity);
 }
 
 public class SaleCommand implements RegisterCommand {
@@ -8,8 +8,8 @@ public class SaleCommand implements RegisterCommand {
     public SaleCommand(Transactions transaction){
         this.transaction = transaction;
     }
-    public void execute(){
-        transaction.sell();
+    public void execute(String s, int quantity){
+        transaction.sell(s,quantity);
     }
     
 }
@@ -23,18 +23,38 @@ public class RefundCommand implements RegisterCommand{
         transaction.refund();
     }
 }
+import java.util.*;
+
 public class Register {
     RegisterCommand input;
-    public Register(){}
+    static double price;
+    public Register(){
+
+    }
     public void setCommand(RegisterCommand command){
-       input = command;
+
+        input = command;
     }
-    public void buttonWasPressed(){
-        input.execute();
+
+    public static double getPrice() {
+        Random rand = new Random();
+        price = 50 + (int)(Math.random() * ((1000 - 50) + 1));
+        return price;
     }
+    public void setPrice(double price){
+        this.price = price;
+    }
+
+public class Transactions {
+    double price;
+    public void sell(String s, int quantity){
+        this.price =  Register.getPrice();
+        People.add(s,quantity);
+        System.out.println("The "+ s+" has been sold for "+ price);
+    }
+
     
 }
-
 public class Transactions {
     public void sell(){
         System.out.println("A sale has been made");
@@ -44,7 +64,6 @@ public class Transactions {
     }
     
 }
-
 
 public class TestRegister {
     public static void main(String[] args){
@@ -109,14 +128,89 @@ class ProtectionPlan extends AddOn {
 import java.util.*;
 
 public class People {
-    List<Object> x = new ArrayList<Object>();
+    static List<Object> x = new ArrayList<Object>();
+    int quantity;
+    String firstname, lastname, email,address,password,billingAddress,shippingAddress,username;
 
-    public void add(Object obj){
-        x.add(obj);
+    public People(String arr[]){
+        this.firstname = arr[0];
+        this.lastname = arr[1];
+        this.email = arr[2];
+        this.address = arr[3];
+        this.password = arr[4];
+        this.billingAddress = arr[5];
+        this.shippingAddress=arr[6];
+        this.username = arr[7];
     }
-    public void displayItems(){
-        for(int i=0;i<x.size();i++){
-            System.out.println(x.get(i).getClass().getName());
+
+    public static void add(String s, int quantity){
+        x.add(s);
+        x.add(quantity);
+    }
+    public void remove (String s, int quantity){
+        for(int i = 0; i<x.size();i+=2) {
+            if(x.get(i).equals(s)) {
+                int q = (int) x.get(i + 1);
+                q -= quantity;
+                i=i+1;
+
+            }
+        }
+    }
+    public String getFirstname(){
+        return firstname;
+    }
+    public String getLastnamename(){
+        return lastname;
+    }
+    public String getEmail(){
+        return email;
+    }
+    public String getAddress(){
+        return address;
+    }
+    public String getPassword(){
+        return password;
+    }
+    public String getBillingAddress(){
+        return billingAddress;
+    }
+    public String getShippingAddress(){
+        return shippingAddress;
+    }
+    public String getUsername(){
+        return username;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setBillingAddress(String billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+    public void setShippingAddress(String shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void printItems(){
+        for(int i=0;i<x.size();i+=2){
+            System.out.print(x.get(i));
+            System.out.print(" "+x.get(i+1)+"\n");
         }
     }
     

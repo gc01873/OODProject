@@ -1,42 +1,291 @@
 package mong;
 
-
+import java.util.ArrayList;
 import java.util.List;
-
-
-
-import com.mongodb.*;
-import com.mongodb.async.SingleResultCallback;
-import com.mongodb.client.*;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import org.bson.Document;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
-
-import java.util.*;
-
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 
-import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+import com.mongodb.async.SingleResultCallback;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.scene.control.TextField;
+import org.bson.Document;
+
+//create the global variable
+public class Main extends Application {
+    //List<Document>employees;
+    public static void main(String[] args) {
+
+        /*for gui maybe creating a method to store the values of the employee documents*/
 
 
-public class mMongo {
-    /*
-        mongoClient = MongoClients.create("mongodb://localhost:27017");
-    */
-    public static void main(String[] args) throws InterruptedException {
+        launch();
 
 
+    }
+
+    @Override
+
+    public void start(Stage primaryStage) throws Exception {
+
+
+        primaryStage.setTitle("Tech 2GO");
+
+        Pane pane = new Pane();
+        pane.setStyle("-fx-background-color: green");
+
+
+        //Create Username Label
+        Label label1 = new Label("Enter Account Username: ");
+        label1.setLayoutY(50);
+        label1.setLayoutX(100);
+        label1.setStyle("-fx-text-fill: white");
+
+        //Create Password Label
+        Label label2 = new Label("Enter Account Password: ");
+        label2.setLayoutY(100);
+        label2.setLayoutX(100);
+        label2.setStyle("-fx-text-fill: white");
+
+        //Create Purchase Label
+        Label label3 = new Label("What would you like to purchase? ");
+        label3.setLayoutY(150);
+        label3.setLayoutX(200);
+        label3.setStyle("-fx-text-fill: white");
+
+        //Create Results Label
+        Label label4 = new Label("Results: ");
+        label4.setLayoutY(380);
+        label4.setLayoutX(100);
+        label4.setStyle("-fx-text-fill: white");
+
+        //Create Quantity Label
+        Label label5 = new Label("Quantity: ");
+        label5.setLayoutY(230);
+        label5.setLayoutX(400);
+        label5.setStyle("-fx-text-fill: white");
+
+        //Create Username TextField
+        TextField TextField1 = new TextField();
+        TextField1.setLayoutX(240);
+        TextField1.setLayoutY(50);
+
+        //Create Password TextField
+        TextField TextField2 = new TextField();
+        TextField2.setLayoutX(240);
+        TextField2.setLayoutY(100);
+
+        //Create Purchase TextField
+        TextField TextField3 = new TextField();
+        TextField3.setLayoutX(220);
+        TextField3.setLayoutY(175);
+
+        //Create Results TextField
+        TextField TextField4 = new TextField();
+        TextField4.setLayoutX(100);
+        TextField4.setLayoutY(400);
+        TextField4.setPrefWidth(400);
+        TextField4.setPrefHeight(175);
+
+        //Create Quantity TextField
+        TextField TextField5 = new TextField();
+        TextField5.setLayoutX(460);
+        TextField5.setLayoutY(230);
+        TextField5.setPrefWidth(50);
+
+        //Buy Button
+        Button b1 = new Button("Buy");
+        b1.setLayoutY(240);
+        b1.setLayoutX(100);
+        //Action of Buy Button
+        b1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                System.out.println("Buy button has been pressed");
+                String strquantity = TextField5.getText();
+                String userinput = TextField3.getText();
+                //trymethod before I parse quantity
+                try {
+                    int quan = Integer.parseInt(strquantity);
+
+
+                    boolean t = searchInv(userinput, quan);
+
+                    if (t) {
+                        //gets the value of price
+                        double price = searchPrice(userinput, quan);
+                        String strPrice = Double.toString(price);
+                        //call the register method to complete the transaction kosi.
+                        //after the transaction add the string and quantity into a hashmap.
+
+                    }
+                } catch (NumberFormatException e) {
+                    //try and catch statement in case user accidently  selects item without a quantity.
+
+                    TextField4.setText("ERROR: TEXTFIELD HAS BEEN LEFT BLANK Select the Stop button and try again.");
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    //catches any other errors un accounted for
+                } finally {
+                    System.out.println("Select the quit button and try again. Please Enter Both item name and quantity in the textfields");
+
+                }
+
+
+            }
+        });
+
+        //List Items Button
+        Button b2 = new Button("List Items");
+        b2.setLayoutX(100);
+        b2.setLayoutY(280);
+        //Action of List Items Button
+        b2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                IterateProducts();
+
+            }
+        });
+
+        //Clear Search Button
+        Button b3 = new Button("Clear Search");
+        b3.setLayoutY(320);
+        b3.setLayoutX(100);
+        //Action of Clear Search Button
+        b3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                TextField4.clear();
+
+            }
+
+        });
+        //Search button
+        Button b4 = new Button("Search");
+        b4.setLayoutX(400);
+        b4.setLayoutY(175);
+        b4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String s = TextField3.getText();
+                if (s != null) {
+                    System.out.println(s);
+                }
+                TextField4.setText(s);
+                String search = search(s);
+                TextField4.setText(search);
+                //store the string value of the product textfield.
+
+
+                //have a method to compare the value to the database.
+                //if the value is contained, print out all information regarding that product within the method.
+
+
+            }
+        });
+//Create Enter Button
+
+        Button b5 = new Button("Enter");
+
+        b5.setLayoutY(100);
+
+        b5.setLayoutX(400);
+
+        //Action of the Enter Button
+
+        b5.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+
+            public void handle(ActionEvent event) {
+
+                String username = TextField1.getText();
+
+                String password = TextField2.getText();
+
+                String[] confirm = AccountConfirmation(username, password);
+                //return an array of user info
+                if (confirm.length > 0) {
+                    System.out.println(confirm.length);
+                    TextField4.setText("Logging in..... Logged IN.Please Enter Both item name and quantity in the textfields\n");
+
+
+                    //set the values in the people class.
+
+                } else {
+                    TextField4.setText("Username or Password is not correct. Please try again");
+                }
+
+            }
+
+        });
+
+        //Create Stop Button
+
+        Button b6 = new Button("Stop");
+
+        b6.setLayoutY(320);
+
+        b6.setLayoutX(460);
+
+        //Action for the Stop Button
+
+        b6.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+
+            public void handle(ActionEvent event) {
+
+                try {
+
+                    primaryStage.close();
+
+                } catch (Exception e) {
+
+                    // TODO Auto-generated catch block
+
+                    e.printStackTrace();
+
+                }
+
+            }
+        });
+
+        //add to container
+        pane.getChildren().addAll(b1, b2, b3, b4, b5, b6, label1, label2, label3, label4, label5, TextField1, TextField2, TextField3, TextField4, TextField5);
+        //create Scene
+        Scene mainScene = new Scene(pane, 600, 600);
+
+        //add to Stage
+        primaryStage.setScene(mainScene);
+
+        //Show Stage
+        primaryStage.show();
+
+    }
+
+    public boolean searchInv(String a, int quantity) {
         CountDownLatch latch = new CountDownLatch(1);
         // connect to the local database server,default:127.0.0.1:27017
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         // get handle to "testDB" database
-        MongoDatabase database = (MongoDatabase) mongoClient.getDatabase("Tech2Go");
+        MongoDatabase database = mongoClient.getDatabase("Tech2Go");
+        MongoCollection<org.bson.Document> collection = database.getCollection("Inventory");
+        MongoCollection<org.bson.Document> collectionAdd = database.getCollection("Addon");
 
         //code below will help with timing.
         SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
@@ -46,38 +295,245 @@ public class mMongo {
                 latch.countDown();
             }
         };
-
-    /*
-
-    What's actually happening is the main method is finishing before your call to the database finishes.
-If you alter your code to wait for the results to come back before terminating, you get a much more reasonable result.
-     */
-        // get a handle to the "test" collection
-        MongoCollection<Document> collection = database.getCollection("Addon");
-
-        System.out.println("Collection completed");
-        collection.updateOne(Filters.eq("Product", "Insurance Package 1"), Updates.set("Price", 50.00 - 6));
-        /*Update value works for the database*/
-
-        FindIterable<Document> iterDoc = collection.find();
-/*collection.find, finds all the documents in the selection and stores it in the employee list*/
-        List<Document> employees = (List<Document>) collection.find().into(
+        List<Document> inv = collection.find(Filters.eq("Product", a)).into(
                 new ArrayList<Document>());
+        if (inv.size() > 0) {
 
-        /*for gui maybe creating a method to store the values of the employee documents*/
+            if (inv.get(0).getString("Product").equals(a)) {
+                //get the current value of the stock in the collections. subtract by quantity then update database.
+                int stock = inv.get(0).getInteger("Stock");
 
-        for (Document employee : employees) {
-                /*prints out the values of the employee Document, through each iteration*/
-                System.out.println("name = " + employee.getString("Warranty period")
-                        + " course details below");
-                System.out.println("course name = " + employee.getString("Product"));
-                System.out.println("cours type = " + employee.getDouble("Price"));
-                  /*if the product name in the collection equals the hard coded syntax, then the code was sucessful*/
-                if(employee.getString("Product").equals("Insurance Package 1")){
-                    System.out.println("Test sucedded");
+                //conditonal to make sure stock does not go below 0
+                if (quantity <= stock) {
+                    stock = stock - quantity;
+                } else {
+                    //the quantity is more than at stock so let user know
+                    //return false and print out the only stock avilable and ask user to input again
+                    System.out.printf("We only have %d available. Please re-enter quantity", stock);
+
+                    return false;
+
+
                 }
+                collection.updateOne(Filters.eq("Product", a), Updates.set("Stock", stock));
+                System.out.println("Item and quantity is available ");
+                //close database because statement has updated.
+                return true;
+            }
+        } else {
+            System.out.println("Error: Item is not found. Please make sure you entered the correct item name along with the quantity. " +
+                    "Press List Items to see the details of all items in stock");
+        }
+
+        List<Document> addOn = collectionAdd.find(Filters.eq("Product", a)).into(
+                new ArrayList<Document>());
+        if (addOn.size() > 0) {
+
+            if (addOn.get(0).getString("Product").equals(a)) {
+                //get the current value of the stock in the collections. subtract by quantity then update database.
+                int stock = addOn.get(0).getInteger("Stock");
+
+                //conditonal to make sure stock does not go below 0
+                if (quantity <= stock) {
+                    stock = stock - quantity;
+                } else {
+                    //the quantity is more than at stock so let user know
+                    //return false and print out the only stock avilable and ask user to input again
+                    System.out.printf("We only have %d available. Please re-enter quantity", stock);
+                    return false;
+
+                }
+                collectionAdd.updateOne(Filters.eq("Product", a), Updates.set("Stock", stock));
+                System.out.println("Item and quantity is available ");
+                //close database because statement has updated.
+                return true;
             }
         }
 
+        return false;
     }
 
+    //create method to iterate through products and addon items by creating two lists
+    public void IterateProducts() {
+        CountDownLatch latch = new CountDownLatch(1);
+        // connect to the local database server,default:127.0.0.1:27017
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        // get handle to "testDB" database
+        MongoDatabase database = mongoClient.getDatabase("Tech2Go");
+
+        MongoCollection<org.bson.Document> collection = database.getCollection("Inventory");
+        MongoCollection<org.bson.Document> collectionAddon = database.getCollection("Addon");
+
+        //code below will help with timing.
+        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
+            @Override
+            public void onResult(final Void result, final Throwable t) {
+                System.out.println("Operation Finished!");
+                latch.countDown();
+            }
+        };
+        List<Document> addOn = collectionAddon.find().into(new ArrayList<Document>());
+        //used casting.
+        List<Document> inv = collection.find().into(
+                new ArrayList<Document>());
+        for (Document items : inv) {
+//print out Product, Price, Year relseased and stock in string format.
+            System.out.printf("Product: %s\n", items.getString("Product"));
+            System.out.printf("Price: %s\n", items.getDouble("Price"));
+            System.out.printf("Year Released: %s\n", items.getInteger("YearsReleased"));
+            System.out.printf("Stock: %s\n", items.getInteger("Stock"));
+            System.out.println();
+            //return the array of inv
+
+        }
+        System.out.println();
+        System.out.println();
+
+        for (Document addInv : addOn) {
+            System.out.printf("Product: %s\n", addInv.getString("Product"));
+            System.out.printf("Price: %s\n", addInv.getDouble("Price"));
+            System.out.printf("Info: %s\n", addInv.getString("Description"));
+            System.out.printf("Warranty period: %s\n", addInv.getString("Warranty period"));
+            System.out.printf("Stock: %s\n", addInv.getInteger("Stock"));
+            System.out.println();
+
+        }
+
+
+    }
+
+    public String[] AccountConfirmation(String username, String password) {
+        /*if there is a username and password that matches a document, return all use information into a string*/
+
+
+        CountDownLatch latch = new CountDownLatch(1);
+        // connect to the local database server,default:127.0.0.1:27017
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        // get handle to "testDB" database
+        MongoDatabase database = mongoClient.getDatabase("Tech2Go");
+        MongoCollection<org.bson.Document> collection = database.getCollection("Users");
+
+        //code below will help with timing.
+        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
+            @Override
+            public void onResult(final Void result, final Throwable t) {
+                System.out.println("Operation Finished!");
+                latch.countDown();
+            }
+        };
+        List<Document> user = collection.find(Filters.eq("UserName", username)).into(
+                new ArrayList<Document>());
+        //if there is a document that matches, index would be 0
+        if (user.size() > 0) {
+            if (user.get(0).getString("UserName").equals(username) && user.get(0).getString("Password").equals(password)) {
+                String[] account = new String[7];
+                //means userinput matches an account in the db so extract all the user info into the database to create user class*/
+                account[0] = user.get(0).getString("First_Name");
+                account[1] = user.get(0).getString("Last_Name");
+                account[2] = user.get(0).getString("Email_Address");
+                account[3] = user.get(0).getString("password");
+                account[4] = user.get(0).getString("Billing_Address");
+                account[5] = user.get(0).getString("Shipping_address");
+                account[6] = user.get(0).getString("UserName");
+                //return array because found a match
+
+
+                return account;
+            }
+
+
+        }
+        String[] account = new String[0];
+        //if the condtion didn't work the default account length would be 0;
+        return account;
+
+
+    }
+
+    //for now create the same iteration but return the price of the item
+    public double searchPrice(String a, int quantity) {
+        double price = 0;
+        CountDownLatch latch = new CountDownLatch(1);
+
+        // connect to the local database server,default:127.0.0.1:27017
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        // get handle to "testDB" database
+        MongoDatabase database = mongoClient.getDatabase("Tech2Go");
+        MongoCollection<org.bson.Document> collection = database.getCollection("Inventory");
+        MongoCollection<org.bson.Document> collectionAddon = database.getCollection("Addon");
+        List<Document> addOn = collectionAddon.find(Filters.eq("product", a)).into(
+                new ArrayList<Document>());
+        //code below will help with timing.
+
+        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
+            @Override
+            public void onResult(final Void result, final Throwable t) {
+                System.out.println("Operation Finished!");
+                latch.countDown();
+            }
+        };
+        List<Document> inv = collection.find(Filters.eq("Product", a)).into(
+                new ArrayList<Document>());
+        if (inv.size() > 0) {
+            price = (inv.get(0).getDouble("Price") * (double) quantity);
+            return price;
+
+        }
+
+
+        if (addOn.size() > 0) {
+            //match the product now get the price of the product
+            price = (addOn.get(0).getDouble("Price") * (double) quantity);
+            return price;
+
+        }
+        return price;
+    }
+
+    public String search(String a) {
+        CountDownLatch latch = new CountDownLatch(1);
+        // connect to the local database server,default:127.0.0.1:27017
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        // get handle to "testDB" database
+        MongoDatabase database = mongoClient.getDatabase("Tech2Go");
+        MongoCollection<org.bson.Document> collection = database.getCollection("Inventory");
+        MongoCollection<org.bson.Document> collectionAdd = database.getCollection("Addon");
+
+        //code below will help with timing.
+        SingleResultCallback<Void> callbackWhenFinished = new SingleResultCallback<Void>() {
+            @Override
+            public void onResult(final Void result, final Throwable t) {
+                System.out.println("Operation Finished!");
+                latch.countDown();
+            }
+        };
+        List<Document> inv = collection.find(Filters.eq("Product", a)).into(
+                new ArrayList<Document>());
+        if (inv.size() > 0) {
+
+            if (inv.get(0).getString("Product").equals(a)) {
+
+                return String.format("Product: %s\n\n Price: %s\n Year Released: %s\n Stock: %s\n", inv.get(0).getString("Product"), inv.get(0).getDouble("Price"), inv.get(0).getInteger("YearsReleased"), inv.get(0).getInteger("Stock"));
+            }
+        } else {
+            return String.format("Error: Item is not found. Please make sure you entered the correct item name along with the quantity. " +
+                    "Press List Items to see the details of all items in stock");
+
+        }
+
+        List<Document> addOn = collectionAdd.find(Filters.eq("Product", a)).into(
+                new ArrayList<Document>());
+        if (addOn.size() > 0) {
+            if (addOn.get(0).getString("Product").equals(a)) {
+                return String.format("Product: %s\n Price: %s\n Year Released: %s\n Stock: %s\n", addOn.get(0).getString("Product"), addOn.get(0).getDouble("Price"), addOn.get(0).getInteger("YearsReleased"), addOn.get(0).getInteger("Stock"));
+
+            } else {
+
+                return String.format("Error: Item is not found. Please make sure you entered the correct item name along with the quantity. " +
+                        "Press List Items to see the details of all items in stock");
+            }
+
+        }
+        return a;
+    }
+}

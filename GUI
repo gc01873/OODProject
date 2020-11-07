@@ -123,12 +123,18 @@ public class Main extends Application  {
         b1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Register r = new Register();
-                Transactions t = new Transactions();
-                SaleCommand s = new SaleCommand(t);
-                r.setCommand(s);
-                r.processTransaction(TextField3.getText(),Integer.parseInt(TextField5.getText()));
-                System.out.println("Buy button has been pressed");
+                // boolean t=  setlist(userinput,quan);
+                   /* if(t){
+                   //gets the value of price
+                   double price=searchPrice(userinput,quan);
+		            can create a dummy variable to mimick price. leave the method all commented.
+                    StoreFacade x = new StoreFacade();
+                    x.setPrice(price);
+                    x.observerTransaction();
+                    x.processTransaction(TextField3.getText(), Integer.parseInt(TextField5.getText()));
+                    x.description(TextField3.getText());
+                }
+                */
             }
         });
 
@@ -161,24 +167,9 @@ public class Main extends Application  {
                 catch(Exception e){
                     System.out.println("No String has been input");
                 }
-                // boolean t=  setlist(userinput,quan);
-                //if boolean returns true, then kosi you can add the product to the people's class
-                           /*
-                if(t){
-                    //gets the value of price
-                   double price=searchPrice(userinput,quan);
-		   ,can create a dummy variable to mimick price. leave the method all commented. 
-              people.register(price);
-	      //call the register method to complete the transaction kosi.
-         
-                     //after the transaction add the string and quantity into a hashmap.
-                     people.hashMap(item,quantity); 
-                }
-
-*/
-
             }
         });
+	
         //Search button
         Button b4 = new Button("Search");
         b4.setLayoutX(400);

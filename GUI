@@ -265,8 +265,28 @@ public class Main extends Application  {
        }
        });
 
+       //Create Guest Button
+         Button b7 = new Button("Guest");
+         
+         b7.setLayoutY(130);
+         
+         b7.setLayoutX(400);
+         
+         //Action of the Guest Button 
+         
+         b7.setOnAction(new EventHandler<ActionEvent>() {
+          
+       @Override
+       
+       public void handle(ActionEvent event) {
+           
+       }
+       
+   });
+       
+
         //add to container
-        pane.getChildren().addAll(b1,b2,b3,b4,b5,b6,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
+        pane.getChildren().addAll(b1,b2,b3,b4,b5,b6,b7,label1,label2,label3,label4,label5,TextField1,TextField2,TextField3,TextField4,TextField5);
 
         //create Scene
         Scene mainScene = new Scene(pane, 600, 600);

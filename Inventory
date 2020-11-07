@@ -14,36 +14,30 @@ public class SaleCommand implements RegisterCommand {
     
 }
 
-public class RefundCommand implements RegisterCommand{
-    Transactions transaction;
-    public RefundCommand(Transactions transaction){
-        this.transaction = transaction;
-    }
-    public void execute(){
-        transaction.refund();
-    }
-}
 import java.util.*;
 
 public class Register {
     RegisterCommand input;
     static double price;
-    public Register(){
 
-    }
     public void setCommand(RegisterCommand command){
 
         input = command;
     }
 
     public static double getPrice() {
-        Random rand = new Random();
-        price = 50 + (int)(Math.random() * ((1000 - 50) + 1));
         return price;
     }
     public void setPrice(double price){
         this.price = price;
     }
+
+    public void processTransaction(String item, int quantity){
+
+        input.execute(item,quantity);
+    }
+
+}
 
 public class Transactions {
     double price;
@@ -55,29 +49,7 @@ public class Transactions {
 
     
 }
-public class Transactions {
-    public void sell(){
-        System.out.println("A sale has been made");
-    }
-    public void refund(){
-        System.out.println("A refund has been made");
-    }
-    
-}
 
-public class TestRegister {
-    public static void main(String[] args){
-        Register reggie = new Register();
-        Transactions t = new Transactions();
-        SaleCommand s = new SaleCommand(t);
-        RefundCommand r = new RefundCommand(t);
-        reggie.setCommand(s);
-        reggie.buttonWasPressed();
-        reggie.setCommand(r);
-        reggie.buttonWasPressed();
-    }
-    
-}
 /////////////////////// Decorator Code ////////////////////////////////////////
 abstract class Device {
     String description = "Unknown item";
@@ -91,26 +63,26 @@ abstract class AddOn extends Device {
         public abstract String getAdditionalInfo();
     }
     
-public class Laptop extends Device{
-    public Laptop(){
-        description = "The Dell XPS 15 is our new pick for the best laptop of 2020. Dell's 2020 update to its 15-inch"+ 
-        "flagship ticks pretty much every box when it comes to what we want from a laptop";
+import java.util.ArrayList;
+
+public class Devices extends Device{
+    public ArrayList<String>arr = new ArrayList<String>();
+
+    public Devices(String s){
+        arr.add(s);
+        for(int i=0;i<arr.size();i++){
+            if (s.equals(arr.get(i))){
+               System.out.println("This "+s+" will be a wonderful addition to your home");
+            }
+        }
+
     }
-    public String getAdditionalInfo(){
-        return "\n"+"This laptop has phenomenal battery life";
+
+    public String getAdditionalInfo(String s){
+        return "This "+s+" is one of our best selling products";
     }
-    
 }
-public class PS5 extends Device{
-    public PS5(){
-        description = "The PS5 (or PlayStation 5) is Sony's long-awaited next-generation console."+
-        " It costs $499.99 / £449.99 / AU$749.95 and will be available from November 12, 2020"+
-        " (in select markets such as the US and Japan) and November 19, 2020 for the rest of the world, including the UK.";
-    }
-    public String getAdditionalInfo(){
-        return "\n"+"The PS5 comes with 825 GB SSD";
-    }
-}
+
 class ProtectionPlan extends AddOn {
     Device device;
     public ProtectionPlan(Device device){
@@ -126,7 +98,6 @@ class ProtectionPlan extends AddOn {
     }
 }
 import java.util.*;
-
 public class People {
     static List<Object> x = new ArrayList<Object>();
     int quantity;
@@ -153,7 +124,6 @@ public class People {
                 int q = (int) x.get(i + 1);
                 q -= quantity;
                 i=i+1;
-
             }
         }
     }
@@ -216,20 +186,6 @@ public class People {
     
 }
 
-public class TechStore {
-    public static void main(String[] args){
-        Device d1 = new Laptop();
-        Device d2 = new PS5();
-        People Kosi = new People();
-        Kosi.add(d1);
-        Kosi.add(d2);
-        Kosi.add(d1);
-        Kosi.add(d1);
-        Kosi.add(d1);
-        Kosi.displayItems();
-    }
-    
-}
 
 /////////////////////// Observer Code ////////////////////////////////////////
 import java.beans.PropertyChangeEvent;
@@ -239,27 +195,21 @@ import java.util.List;
 
 public class NotifyTransactions {
     public static final String FIRSTNAME = "firstName";
-
     private List<Amount> Amounts = new ArrayList<Amount>();
     private List<PropertyChangeListener> listener = new ArrayList<PropertyChangeListener>();
-
+    static double value = 2842020;
     public class Amount {
-
         private double money;
-
-
         public Amount(double money) {
             this.money = money;
         }
 
         public double getMoney() {
-
             return money;
         }
 
         public void setMoney(double money) {
             notifyListeners(this,"Money",this.money,this.money = money);
-
         }
 
     }
@@ -267,16 +217,23 @@ public class NotifyTransactions {
     public List<Amount> getAmounts() {
         return Amounts;
     }
+    public void setValue(double value) {
+    this.value = value;
+    }
+    public double getValue() {
+    return value;
+    }
+
 
     public NotifyTransactions() {
-        // just for testing we hard-code the persons here:
-        Amounts.add(new Amount(50.00));
+        Amounts.add(new Amount(value));
     }
 
     private void notifyListeners(Object object, String property, double oldValue, double newValue) {
         for (PropertyChangeListener name : listener) {
             name.propertyChange(new PropertyChangeEvent(this, property, oldValue, newValue));
         }
+       this.value = newValue;
     }
 
     public void addChangeListener(PropertyChangeListener newListener) {
@@ -284,6 +241,7 @@ public class NotifyTransactions {
     }
 
 }
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -293,20 +251,55 @@ public class StoreObserver implements PropertyChangeListener {
     }
 
     public void propertyChange(PropertyChangeEvent event) {
-        System.out.println( "Before Transaction: "+ event.getOldValue() +"\n"+ "After Transaction: " 
-        + event.getNewValue());
+        System.out.println( "Before Transaction: "+"$"+event.getOldValue() +"\n"+ "After Transaction: "
+        +"$"+event.getNewValue());
     }
 }
-public class test {
-    public static void main(String[] args){
-        NotifyTransactions T = new NotifyTransactions();
-        StoreObserver s = new StoreObserver(T);
-        // we set the amount that each customer has, The observer will be notified
-        for (NotifyTransactions.Amount amount : T.getAmounts()) {
-            amount.setMoney(amount.getMoney() + 110.00);
+
+/////////////////////// Facade Code ////////////////////////////////////////
+import java.util.List;
+
+public class StoreFacade {
+    private Register r;
+    private SaleCommand s;
+    private Transactions t;
+    private NotifyTransactions nt;
+    private StoreObserver so;
+    private Device d;
+    private NotifyTransactions.Amount a;
+    public StoreFacade(){
+        r = new Register();
+        t = new Transactions();
+        s = new SaleCommand(t);
+        r.setCommand(s);
+        nt = new NotifyTransactions();
+        so = new StoreObserver(nt);
+        a = nt.new Amount(2842020);
+    }
+    public void setPrice(double price){
+        r.setPrice(price);
+    }
+    public double getPrice() { return r.getPrice(); }
+
+    public void processTransaction(String item, int quantity){ r.processTransaction(item,quantity); }
+
+    public List<NotifyTransactions.Amount> getAmounts() {
+        return nt.getAmounts();
+    }
+    public void observerTransaction(){
+        for (NotifyTransactions.Amount amount : nt.getAmounts()) {
+            amount.setMoney(amount.getMoney() - r.getPrice());
+            if(amount.getMoney()<0){
+                System.out.println("You do not have enough money for this transaction");
+                return;
+            }
         }
     }
-    
+    public void description(String s){
+        d = new Devices(s);
+    }
+
+
 }
-/////////////////////// Facade Code //////////////////////////////////////// TBD:
+
 

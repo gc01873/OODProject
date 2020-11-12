@@ -56,7 +56,7 @@ abstract class Device {
     public String getDescription(){
         return description;
     }
-    public abstract String getAdditionalInfo();
+    public abstract String getAdditionalInfo(String s);
     
 }
 abstract class AddOn extends Device {

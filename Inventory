@@ -3,6 +3,7 @@ public interface RegisterCommand {
     public void execute(String s, int quantity);
 }
 
+
 public class SaleCommand implements RegisterCommand {
     Transactions transaction;
     public SaleCommand(Transactions transaction){
@@ -36,7 +37,6 @@ public class Register {
 
         input.execute(item,quantity);
     }
-
 }
 
 public class Transactions {
@@ -47,8 +47,8 @@ public class Transactions {
         System.out.println("The "+ s+" has been sold for "+ price);
     }
 
-    
 }
+
 
 /////////////////////// Decorator Code ////////////////////////////////////////
 abstract class Device {
@@ -60,7 +60,7 @@ abstract class Device {
     
 }
 abstract class AddOn extends Device {
-        public abstract String getAdditionalInfo();
+        public abstract String getAdditionalInfo(String s);
     }
     
 import java.util.ArrayList;
@@ -88,18 +88,16 @@ class ProtectionPlan extends AddOn {
     public ProtectionPlan(Device device){
         this.device = device;
     }
-    public String getDescription(){
-        //2
-        return device.getDescription() + "\n\nThis laptop comes with a protection plan";
-    }
-    public String getAdditionalInfo(){
-        return device.getAdditionalInfo() + ".\nThe protection plan will guarantee a replacement if"+
+
+    public String getAdditionalInfo(String s){
+        return device.getAdditionalInfo(s) + ".\nThe protection plan will guarantee a replacement if"+
         " broken or damaged";
     }
 }
+
 import java.util.*;
 public class People {
-    static List<Object> x = new ArrayList<Object>();
+    static HashMap<String, Integer> map = new HashMap<String,Integer>();
     int quantity;
     String firstname, lastname, email,address,password,billingAddress,shippingAddress,username;
 
@@ -113,19 +111,27 @@ public class People {
         this.shippingAddress=arr[6];
         this.username = arr[7];
     }
-
     public static void add(String s, int quantity){
-        x.add(s);
-        x.add(quantity);
-    }
-    public void remove (String s, int quantity){
-        for(int i = 0; i<x.size();i+=2) {
-            if(x.get(i).equals(s)) {
-                int q = (int) x.get(i + 1);
-                q -= quantity;
-                i=i+1;
-            }
+        if(map.containsKey(s)) {
+            int newQuantity = quantity+map.get(s);
+            map.put(s,newQuantity);
         }
+        else{
+            map.put(s, quantity);
+        }
+    }
+    public static void remove (String s, int quantity){
+        int q = map.get(s);
+        if(q>quantity){
+            map.replace(s,q-quantity);
+        }
+        else{
+            map.remove(s);
+        }
+
+    }
+    public void printItems() {
+        System.out.println(map);
     }
     public String getFirstname(){
         return firstname;
@@ -176,14 +182,40 @@ public class People {
     public void setUsername(String username) {
         this.username = username;
     }
+}
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-    public void printItems(){
-        for(int i=0;i<x.size();i+=2){
-            System.out.print(x.get(i));
-            System.out.print(" "+x.get(i+1)+"\n");
+public class Guest extends People {
+    static HashMap<String, Integer> map = new HashMap<String,Integer>();
+
+    public Guest(String[] arr) {
+        super(arr);
+    }
+
+    public static void add(String s, int quantity){
+        if(map.containsKey(s)) {
+            int newQuantity = quantity+map.get(s);
+            map.put(s,newQuantity);
+        }
+        else{
+            map.put(s, quantity);
         }
     }
-    
+    public static void remove (String s, int quantity){
+        int q = map.get(s);
+        if(q>quantity){
+            map.replace(s,q-quantity);
+        }
+        else{
+            map.remove(s);
+        }
+
+    }
+    public void printItems() {
+        System.out.println(map);
+    }
 }
 
 
@@ -298,6 +330,8 @@ public class StoreFacade {
     public void description(String s){
         d = new Devices(s);
     }
+
+}
 
 
 }

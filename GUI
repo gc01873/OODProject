@@ -172,7 +172,7 @@ public class OOD extends Application {
 
                 Label label5 = new Label("Quantity: ");
 
-                label5.setLayoutY(230);
+                label5.setLayoutY(100);
 
                 label5.setLayoutX(380);
 
@@ -204,14 +204,14 @@ public class OOD extends Application {
 
                 TextField5.setLayoutX(430);
 
-                TextField5.setLayoutY(230);
+                TextField5.setLayoutY(100);
 
                 TextField5.setPrefWidth(50);
 
 
                 Button b1 = new Button("Buy");
 
-                b1.setLayoutY(150);
+                b1.setLayoutY(100);
 
                 b1.setLayoutX(150);
 
@@ -265,7 +265,7 @@ public class OOD extends Application {
 
                 b2.setLayoutX(150);
 
-                b2.setLayoutY(200);
+                b2.setLayoutY(150);
 
                 //Action of List Items Button
 
@@ -277,15 +277,15 @@ public class OOD extends Application {
                     }
                 });
 
-                //Clear Search Button
+                //Clear Button
 
-                Button b3 = new Button("Clear Search");
+                Button b3 = new Button("Clear");
 
-                b3.setLayoutY(100);
+                b3.setLayoutY(150);
 
                 b3.setLayoutX(380);
 
-                //Action of Clear Search Button
+                //Action of Clear Button
 
                 b3.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
@@ -319,7 +319,7 @@ public class OOD extends Application {
                 //Search button
                 Button b4 = new Button("Search");
                 b4.setLayoutX(150);
-                b4.setLayoutY(100);
+                b4.setLayoutY(200);
 
                 //Action of the Search Button
                 b4.setOnAction(new EventHandler<ActionEvent>() {

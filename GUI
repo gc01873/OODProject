@@ -3,7 +3,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
+import javafx.scene.control.TextArea;
 import com.mongodb.async.SingleResultCallback;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -56,7 +56,7 @@ public class OOD extends Application {
 //t
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+TextArea textArea = new TextArea();
         primaryStage.setTitle("Tech 2GO");
 
         Pane pane = new Pane();
@@ -188,15 +188,7 @@ public class OOD extends Application {
 
                 //Create Results TextField
 
-                TextField TextField4 = new TextField();
-
-                TextField4.setLayoutX(100);
-
-                TextField4.setLayoutY(320);
-
-                TextField4.setPrefWidth(400);
-
-                TextField4.setPrefHeight(175);
+               
 
                 //Create Quantity TextField
 
@@ -290,7 +282,7 @@ public class OOD extends Application {
                 b3.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        TextField4.clear();
+                        textArea.clear();
 
                     }
 
@@ -329,9 +321,9 @@ public class OOD extends Application {
                         if (s != null) {
                             System.out.println(s);
                         }
-                        TextField4.setText(s);
+                        textArea.setText(s);
                         //String search = search(s);
-                       // TextField4.setText(search);
+                       // textArea.setText(search);
                         //store the string value of the product textfield.
 
 
@@ -373,7 +365,7 @@ public class OOD extends Application {
                     }
 
                 });
-                subPane.getChildren().addAll(iv, label3, label4, label5, TextField3, TextField4, TextField5, b1, b2, b3, b4, b6);
+                subPane.getChildren().addAll(iv, label3, label4, label5, TextField3, textArea, TextField5, b1, b2, b3, b4, b6);
 
                 Scene subScene = new Scene(subPane, 600, 600);
 
@@ -384,7 +376,8 @@ public class OOD extends Application {
 
         });
         //add to container
-
+         textArea.setLayoutX(100);
+        textArea.setLayoutY(320);
         pane.getChildren().addAll(iv, b5, b7, label1, label2, TextField1, TextField2);
 
         //create Scene

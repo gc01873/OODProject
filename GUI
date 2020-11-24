@@ -289,24 +289,7 @@ TextArea textArea = new TextArea();
                 });
 
 
-                b1.setOnAction(new EventHandler<ActionEvent>() {
-
-                    @Override
-
-                    public void handle(ActionEvent event) {
-
-                        try {
-                            System.out.println("Clear Search button has been pressed");
-                            String strquantity = TextField5.getText();
-                            String userinput = TextField3.getText();
-                            int quan = Integer.parseInt(strquantity);
-                        } catch (Exception e) {
-                            System.out.println("No String has been input");
-                        }
-                        // boolean t=  setlist(userinput,quan);
-                        //if boolean returns true, then kosi you can add the product to the people's class
-                    }
-                });
+          
 
                 //Search button
                 Button b4 = new Button("Search");

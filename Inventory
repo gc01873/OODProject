@@ -39,15 +39,17 @@ public class Register {
     }
 }
 
+
 public class Transactions {
     double price;
-    public void sell(String s, int quantity){
+    public String sell(String s, int quantity){
         this.price =  Register.getPrice();
         People.add(s,quantity);
-        System.out.println("The "+ s+" has been sold for "+ price);
+        return "The "+ s+" has been sold for "+ price;
     }
 
 }
+
 
 
 /////////////////////// Decorator Code ////////////////////////////////////////
@@ -72,16 +74,22 @@ public class Devices extends Device{
         arr.add(s);
         for(int i=0;i<arr.size();i++){
             if (s.equals(arr.get(i))){
-               System.out.println("This "+s+" will be a wonderful addition to your home");
+               System.out.println(statement(s));
             }
         }
 
     }
 
     public String getAdditionalInfo(String s){
+
         return "This "+s+" is one of our best selling products";
     }
+    public String statement(String s){
+        return "This "+s+" will be a wonderful addition to your home";
+    }
+    
 }
+
 
 class ProtectionPlan extends AddOn {
     Device device;

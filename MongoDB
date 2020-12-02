@@ -4,6 +4,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 import com.mongodb.async.SingleResultCallback;
 import com.mongodb.client.MongoClient;
@@ -39,6 +41,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.TextField;
@@ -62,6 +65,8 @@ public class OOD extends Application  {
 
         Image image = new Image("https://cdn-imgix.headout.com/tour/22589/TOUR-IMAGE/f243beca-f842-4915-9c80-df5f65e81a20-11825-tokyo-early-blooming-cherry-blossom-?auto=compress&fm=pjpg&w=1080&h=675&crop=faces&fit=min");
         ImageView iv = new ImageView(image);
+        iv.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
+        iv.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
 
 
 
@@ -144,10 +149,14 @@ public class OOD extends Application  {
                     Stage subStage = new Stage();
                     subStage.setTitle("Tech 2 GO");
 
+                    primaryStage.close();
+
                     Pane subPane = new Pane();
 
                     Image image = new Image("https://cdn-imgix.headout.com/tour/22589/TOUR-IMAGE/f243beca-f842-4915-9c80-df5f65e81a20-11825-tokyo-early-blooming-cherry-blossom-?auto=compress&fm=pjpg&w=1080&h=675&crop=faces&fit=min");
                     ImageView iv = new ImageView(image);
+                    iv.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
+                    iv.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
 
 
                     Label label3 = new Label("What would you like to purchase? ");
@@ -218,6 +227,7 @@ public class OOD extends Application  {
                     b1.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
+                            //Change this to display in console
 
                             System.out.println("Buy button has been pressed");
 
@@ -229,7 +239,9 @@ public class OOD extends Application  {
                                 System.out.println(userinput);
                                 int quan = Integer.parseInt(strquantity);
                                 boolean t = searchInv(userinput, quan);
-
+//Rn Errors that we are trying to fix: Does not print statements to textfield
+                                //Should not be able to purchase if we dont have enough money
+                                //
                                 if (t) {
                                     //gets the value of price
                                     double price = searchPrice(userinput, quan);
@@ -238,21 +250,24 @@ public class OOD extends Application  {
                                     x.observerTransaction();
                                     x.processTransaction(TextField3.getText(), Integer.parseInt(TextField5.getText()));
                                     x.description(TextField3.getText());
+                                    textArea.appendText("\n"+x.description(TextField3.getText()).getAdditionalInfo(TextField3.getText())+"\n");
+                                    textArea.appendText(x.description(TextField3.getText()).statement(TextField3.getText())+"\n");
+                                    textArea.appendText(x.DisplayAmount()+"\n");
                                     //    r.processTransaction(TextField3.getText(),Integer.parseInt(TextField5.getText()));
 
                                 }
                             } catch (NumberFormatException e) {
                                 //try and catch statement in case user accidently  selects item without a quantity.
 
-                                textArea.setText("ERROR: TEXTFIELD HAS BEEN LEFT BLANK Select the Stop button and try again.");
+                                textArea.setText("ERROR: TEXTFIELD HAS BEEN LEFT BLANK. Please verify that \n you have selected a valid item and quantity before buying an item!");
 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                                 //catches any other errors un accounted for
-                            } finally {
+                            } /*finally {
                                 System.out.println("Select the quit button and try again. Please Enter Both item name and quantity in the textfields");
 
-                            }
+                            }*/
 
 
                         }
@@ -280,7 +295,7 @@ public class OOD extends Application  {
 
                     //Clear Search Button
 
-                    Button b3 = new Button("Clear");
+                    Button b3 = new Button("Clear Search");
 
                     b3.setLayoutY(100);
 
@@ -292,6 +307,7 @@ public class OOD extends Application  {
                         @Override
                         public void handle(ActionEvent event) {
                             textArea.clear();
+                            TextField3.clear();
 
                         }
 
@@ -343,6 +359,8 @@ public class OOD extends Application  {
                             try {
 
                                 primaryStage.close();
+                                //Added the command to close the next stage
+                                subStage.close();
 
                             } catch (Exception e) {
 
@@ -416,7 +434,11 @@ public class OOD extends Application  {
                 } else {
                     //the quantity is more than at stock so let user know
                     //return false and print out the only stock avilable and ask user to input again
-                   textArea.setText("We only have %d available. Please re-enter quantity"+ stock);
+                    //Added in this line of code to make it make sense.
+                    if(stock>1)
+                    textArea.setText("We only have " + stock+" units available. Please re-enter quantity");
+                    else
+                        textArea.setText("We only have " + stock+" unit available. Please re-enter quantity");
 
                     return false;
 
@@ -431,6 +453,8 @@ public class OOD extends Application  {
         } else {
             System.out.println("Error: Item is not found. Please make sure you entered the correct item name along with the quantity. " +
                     "Press List Items to see the details of all items in stock");
+            textArea.setText("Error: Item is not found. Please make sure you entered the correct item name along with the quantity. " +
+                    "\nPress List Items to see the details of all items in stock");
         }
 
         List<Document> addOn = collectionAdd.find(Filters.eq("Product", a)).into(
@@ -488,11 +512,11 @@ public class OOD extends Application  {
         for (Document items : inv) {
 //print out Product, Price, Year relseased and stock in string format.
 
-            s1.append("\nProduct:"+items.getString("Product"));
-            s1.append("\nPrice:"+items.getDouble("Price"));
-            s1.append("\nYear Released:"+items.getInteger("YearReleased"));
-            s1.append("\nStock:"+items.getInteger("Stock")+"\n");
-            s1.append("Description:"+items.getString("Item_Description")+"\n");
+            s1.append("\nProduct: "+items.getString("Product"));
+            s1.append("\nPrice: $"+items.getDouble("Price"));
+            s1.append("\nYear Released: "+items.getInteger("YearReleased"));
+            s1.append("\nStock: "+items.getInteger("Stock")+"\n");
+            s1.append("Description: "+items.getString("Item_Description")+"\n");
             //return the array of inv
 
 
@@ -502,18 +526,18 @@ public class OOD extends Application  {
 
         for (Document addInv : addOn) {
 
-            s1.append("\nProduct:"+addInv.getString("Product"));
-            s1.append("\nPrice:"+addInv.getDouble("Price"));
+            s1.append("\nProduct: "+addInv.getString("Product"));
+            s1.append("\nPrice: $"+addInv.getDouble("Price"));
             s1.append("\nDescription: "+addInv.getString("Description"));
-            s1.append("\nWarranty period:"+addInv.getString("Warranty period"));
-            s1.append("\nyear Stock:"+addInv.getInteger("Stock"));
-s1.append("\n");//space out products
+            s1.append("\nWarranty period: "+addInv.getString("Warranty period"));
+            s1.append("\nyear Stock: "+addInv.getInteger("Stock"));
+            s1.append("\n");//space out products
 
 
 
         }
 
-return s1.toString();
+        return s1.toString();
     }
 
     public String[] AccountConfirmation(String username, String password) {
@@ -591,7 +615,6 @@ return s1.toString();
         if (inv.size() > 0) {
             price = (inv.get(0).getDouble("Price") * (double) quantity);
             return price;
-
         }
 
 
